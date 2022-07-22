@@ -1,11 +1,10 @@
 // from: http://stackoverflow.com/a/21913575
-export function getComputedTranslateY(obj) {
+export function getComputedTranslateY(obj: Element) {
   if (!window.getComputedStyle) {
     return 0;
   }
   const style = getComputedStyle(obj);
-  const transform =
-    style.transform || style.webkitTransform || style.mozTransform;
+  const transform = style.transform;
   let mat = transform.match(/^matrix3d\((.+)\)$/);
   if (mat) {
     return parseFloat(mat[1].split(', ')[13]);
@@ -19,7 +18,7 @@ export function scrollY() {
   return window.pageYOffset || window.document.documentElement.scrollTop;
 }
 
-export function extend(a, b) {
+export function extend(a: any, b: any) {
   return Object.assign(a, b);
 }
 
@@ -33,7 +32,7 @@ export function getViewportH() {
   return client;
 }
 
-export function isValidColor(color) {
+export function isValidColor(color: string) {
   if (color.charAt(0) === '#') {
     const hexValue = color.substring(1);
     return [3, 4, 6, 8].indexOf(hexValue.length) > -1 && parseInt(hexValue, 16);

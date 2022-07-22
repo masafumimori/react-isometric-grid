@@ -1,28 +1,33 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import stylePropType from 'react-style-proptype';
 import classNames from 'classnames';
 import uniqid from 'uniqid';
 
 import styles from './react-isometric-grid.scss';
 import { isValidColor } from './utils/misc';
 
-const DEFAULT_STYLE = {
+const DEFAULT_STYLE: React.CSSProperties = {
   transformStyle: 'preserve-3d',
   width: '200px',
   height: '200px',
 };
 
-const DEFAULT_LAYER_STYLE = {
+const DEFAULT_LAYER_STYLE: React.CSSProperties = {
   width: '200px',
   height: '200px',
 };
 
-class Cell extends Component {
+class Cell extends Component<CellProps> {
   render() {
-    const { layers, href, title, style, layerStyle, onClick } = this.props;
+    const {
+      layers,
+      href,
+      title,
+      style = DEFAULT_STYLE,
+      layerStyle = DEFAULT_LAYER_STYLE,
+      onClick,
+    } = this.props;
 
-    const layerList = layers.map(layer => {
+    const layerList = layers.map((layer) => {
       if (!layer) {
         return null;
       }
@@ -57,7 +62,7 @@ class Cell extends Component {
             [styles.grid__link]: true,
             [styles['grid__link--onclick']]: !!onClick,
           })}
-          href={href || null}
+          href={href || undefined}
           onClick={onClick}
           style={{ ...DEFAULT_STYLE, ...style }}
         >
@@ -69,32 +74,24 @@ class Cell extends Component {
   }
 }
 
-Cell.propTypes = {
+export type CellProps = {
   // arry of images to be in the stack, or hex string for layer colors
-  layers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  layers: string[];
 
   // onclick navigation link
-  href: PropTypes.string,
+  href: string;
 
   // onClick function
-  onClick: PropTypes.func,
+  onClick: () => void;
 
   // optional tital for the stack
-  title: PropTypes.string,
+  title: string;
 
   // styling for the Cell element
-  style: stylePropType,
+  style: React.CSSProperties;
 
   // styling for the individual layers
-  layerStyle: stylePropType,
-};
-
-Cell.defaultProps = {
-  href: null,
-  onClick: null,
-  title: null,
-  style: DEFAULT_STYLE,
-  layerStyle: DEFAULT_LAYER_STYLE,
+  layerStyle: React.CSSProperties;
 };
 
 export default Cell;

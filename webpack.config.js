@@ -8,7 +8,7 @@ const target = process.env.TARGET || 'umd';
 
 const styleLoader = {
   loader: 'style-loader',
-  options: { insertAt: 'top' },
+  options: { insert: 'top' },
 };
 
 const fileLoader = {
@@ -25,7 +25,7 @@ const postcssLoader = {
   },
 };
 
-const cssLoader = isLocal => ({
+const cssLoader = (isLocal) => ({
   loader: 'css-loader',
   options: {
     modules: true,
@@ -36,7 +36,8 @@ const cssLoader = isLocal => ({
 });
 
 const config = {
-  entry: './src/index',
+  mode: 'production',
+  entry: './src/index.ts',
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js',
@@ -46,37 +47,29 @@ const config = {
   devtool: 'source-map',
   plugins: [
     new webpack.EnvironmentPlugin({ NODE_ENV: 'production' }),
-    new webpack.optimize.OccurrenceOrderPlugin(),
+    // new webpack.optimize.OccurrenceOrderPlugin(),
     // Use uglify for dead code removal
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
-      mangle: false,
-      beautify: true,
-      comments: true,
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   compress: {
+    //     warnings: false,
+    //   },
+    //   mangle: false,
+    //   beautify: true,
+    //   comments: true,
+    // }),
   ],
   module: {
     rules: [
-      {
-        test: /\.jsx?$/,
-        use: ['babel-loader'],
-        exclude: path.join(__dirname, 'node_modules'),
-      },
-      {
-        test: /\.scss$/,
-        use: [styleLoader, cssLoader(true), postcssLoader, 'sass-loader'],
-        exclude: path.join(__dirname, 'node_modules'),
-      },
-      {
-        // Used for importing css from external modules (react-virtualized, etc.)
-        test: /\.css$/,
-        use: [styleLoader, cssLoader(false), postcssLoader],
-        // use: [styleLoader, cssLoader(false)],
-      },
+      { test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader'] },
+      { test: /\.tsx?$/, loader: 'babel-loader' },
+      { test: /\.tsx?$/, loader: 'ts-loader' },
+      { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
     ],
   },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.json'],
+  },
+  target: ['web', 'es5'],
 };
 
 switch (target) {
@@ -85,7 +78,7 @@ switch (target) {
     config.externals = [
       nodeExternals({
         // load non-javascript files with extensions, presumably via loaders
-        whitelist: [/\.(?!(?:jsx?|json)$).{1,5}$/i],
+        allowlist: [/\.(?!(?:jsx?|json)$).{1,5}$/i],
       }),
     ];
     break;
@@ -145,3 +138,5 @@ switch (target) {
 }
 
 module.exports = config;
+
+// REF: https://medium.com/swlh/setting-up-a-react-typescript-sass-webpack-and-babel-7-project-in-6-steps-b4d172d1d0d6

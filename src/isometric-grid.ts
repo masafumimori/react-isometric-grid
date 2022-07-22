@@ -14,7 +14,7 @@ import {
 } from './utils/animation-frame';
 import styles from './react-isometric-grid.scss';
 
-const defaultOptions = {
+const DEFAULT_OPTIONS = {
   // grid perspective value
   perspective: 0,
   // grid transform
@@ -23,7 +23,7 @@ const defaultOptions = {
   stackItemsAnimation: {
     // this follows the dynamics.js (https://github.com/michaelvillar/dynamics.js) animate fn syntax
     // properties (pos is the current subitem position)
-    properties(pos) {
+    properties(pos: number) {
       return {
         translateZ: (pos + 1) * 50,
       };
@@ -44,14 +44,51 @@ const defaultOptions = {
   onGridLoaded() {
     return false;
   },
+} as const;
+
+export type OptionType = {
+  perspective: number;
+  // grid transform
+  transform: string;
+  // each grid item animation (for the subitems)
+  stackItemsAnimation: {
+    // this follows the dynamics.js (https://github.com/michaelvillar/dynamics.js) animate fn syntax
+    // properties (pos is the current subitem position)
+    properties(pos: number): {
+      translateZ: number;
+    };
+    // animation options (pos is the current subitem position); itemstotal is the total number of subitems
+    options(): {
+      type: any;
+      duration?: number;
+      points?: [
+        { x: number; y: number; cp: [{ x: number; y: number }] },
+        { x: number; y: number; cp: [{ x: number; y: number }] }
+      ];
+      delay?: number;
+    };
+  };
+  // callback for loaded grid
+  onGridLoaded(): boolean;
 };
 
 // iso grid class
 class IsometricGrid {
-  constructor(el, options) {
+  isolayerEl;
+  options;
+  gridEl: any;
+  gridItems;
+  gridItemsTotal;
+  didscroll;
+  requestAnimationFrame;
+  cancelAnimationFrame;
+
+  msnry: any;
+
+  constructor(el: any, options: OptionType) {
     this.isolayerEl = el;
 
-    this.options = extend({}, defaultOptions);
+    this.options = extend({}, DEFAULT_OPTIONS);
     extend(this.options, options);
 
     if (!this.isolayerEl) {
@@ -61,9 +98,8 @@ class IsometricGrid {
     this.gridEl = this.isolayerEl.querySelector(`.${styles.grid}`);
 
     // grid items
-    this.gridItems = [].slice.call(
-      this.gridEl.querySelectorAll(`.${styles.grid__item}`)
-    );
+    this.gridItems = this.gridEl?.querySelectorAll(`.${styles.grid__item}`);
+
     this.gridItemsTotal = this.gridItems.length;
 
     this.didscroll = false;
@@ -82,7 +118,7 @@ class IsometricGrid {
       // initialize masonry
       self.msnry = new Masonry(self.gridEl, {
         itemSelector: `.${styles.grid__item}`,
-        isFitWidth: true,
+        fitWidth: true,
         horizontalOrder: true,
       });
 
@@ -91,9 +127,7 @@ class IsometricGrid {
 
       const transformValue =
         self.options.perspective !== 0
-          ? `perspective(${self.options.perspective}px) ${
-              self.options.transform
-            }`
+          ? `perspective(${self.options.perspective}px) ${self.options.transform}`
           : self.options.transform;
       self.isolayerEl.style.WebkitTransform = transformValue;
       self.isolayerEl.style.transform = transformValue;
@@ -112,13 +146,17 @@ class IsometricGrid {
   initEvents() {
     const self = this;
 
-    this.gridItems.forEach(item => {
-      item.addEventListener('mouseenter', e => self.expandSubItems(e.target));
-      item.addEventListener('mouseleave', e => self.collapseSubItems(e.target));
+    this.gridItems.forEach((item: any) => {
+      item.addEventListener('mouseenter', (e: MouseEvent) =>
+        self.expandSubItems(e.target)
+      );
+      item.addEventListener('mouseleave', (e: MouseEvent) =>
+        self.collapseSubItems(e.target)
+      );
     });
   }
 
-  expandSubItems(item) {
+  expandSubItems(item: any) {
     const self = this;
     const itemLink = item.querySelector('a');
     const subItems = [].slice.call(
@@ -140,11 +178,11 @@ class IsometricGrid {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  collapseSubItems(item) {
+  collapseSubItems(item: any) {
     const itemLink = item.querySelector('a');
     [].slice
       .call(itemLink.querySelectorAll(`.${styles.layer}`))
-      .forEach(subitem => {
+      .forEach((subitem) => {
         dynamics.stop(subitem);
         dynamics.animate(
           subitem,

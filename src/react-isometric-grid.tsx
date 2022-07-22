@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import stylePropType from 'react-style-proptype';
+import React, { Component, ReactNode } from 'react';
 import dynamics from 'dynamics.js';
 import classNames from 'classnames';
 
 import styles from './react-isometric-grid.scss';
-import IsometricGrid from './isometric-grid';
+import IsometricGrid, { OptionType } from './isometric-grid';
 
-class ReactIsometricGrid extends Component {
+class ReactIsometricGrid extends Component<ReactIsometricGridProps> {
+  isometricGrid: any;
+
   componentDidMount() {
     const {
       onGridLoaded,
-      perspective,
-      transform,
+      perspective = DEFAULT_PROPS.perspective,
+      transform = DEFAULT_PROPS.transform,
       stackItemsAnimation,
     } = this.props;
 
@@ -28,7 +28,11 @@ class ReactIsometricGrid extends Component {
   }
 
   render() {
-    const { style, shadow, children } = this.props;
+    const {
+      style = DEFAULT_PROPS.style,
+      shadow = DEFAULT_PROPS.shadow,
+      children,
+    } = this.props;
 
     return (
       <div
@@ -44,39 +48,40 @@ class ReactIsometricGrid extends Component {
   }
 }
 
-ReactIsometricGrid.propTypes = {
+type ReactIsometricGridProps = {
   // have a shadow under the cells
-  shadow: PropTypes.bool,
+  shadow: boolean;
 
   // ongridloaded callback
-  onGridLoaded: PropTypes.func,
+  onGridLoaded: OptionType['onGridLoaded'];
 
   // style
-  style: stylePropType,
+  style: React.CSSProperties;
 
   // children (Cell elements)
-  children: PropTypes.arrayOf(PropTypes.element).isRequired,
+  children: ReactNode;
 
   // perspective value, # of px distance from z origin
-  perspective: PropTypes.number,
+  perspective: number;
 
   // transform of the isometric grid in 3d space
   // https://www.w3schools.com/cssref/css3_pr_transform.asp
-  transform: PropTypes.string,
+  transform: string;
 
   // animation values for each cell dynamicjs
-  stackItemsAnimation: PropTypes.shape({
-    // object of the properties/values you want to animate
-    // https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function
-    properties: PropTypes.func,
+  stackItemsAnimation: OptionType['stackItemsAnimation'];
+  // {
+  //   // object of the properties/values you want to animate
+  //   // https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function
+  //   properties: string,
 
-    // object representing the animation like duration and easing
-    // https://github.com/michaelvillar/dynamics.js#dynamicsanimateel-properties-options
-    options: PropTypes.func,
-  }),
+  //   // object representing the animation like duration and easing
+  //   // https://github.com/michaelvillar/dynamics.js#dynamicsanimateel-properties-options
+  //   options: string,
+  // }
 };
 
-ReactIsometricGrid.defaultProps = {
+const DEFAULT_PROPS = {
   shadow: false,
   onGridLoaded: () => {},
   style: {
@@ -89,18 +94,18 @@ ReactIsometricGrid.defaultProps = {
   perspective: 3000,
   transform: 'scale3d(0.8,0.8,1) rotateY(45deg) rotateZ(-10deg)',
   stackItemsAnimation: {
-    properties(pos) {
+    properties(pos: number) {
       return {
         rotateX: (pos + 1) * -15,
       };
     },
-    options(pos, totalItems) {
+    options(pos: number, totalItems: number) {
       return {
         type: dynamics.spring,
         delay: (totalItems - pos - 1) * 30,
       };
     },
   },
-};
+} as const;
 
 export default ReactIsometricGrid;
