@@ -1,12 +1,12 @@
-import React, { Component, ReactNode } from 'react';
-import dynamics from 'dynamics.js';
-import classNames from 'classnames';
+import React, { Component, ReactNode } from 'react'
+import dynamics from 'dynamics.js'
+import classNames from 'classnames'
 
-import styles from './react-isometric-grid.scss';
-import IsometricGrid, { OptionType } from './isometric-grid';
+import styles from './react-isometric-grid.scss'
+import IsometricGrid, { OptionType } from './isometric-grid'
 
 class ReactIsometricGrid extends Component<ReactIsometricGridProps> {
-  isometricGrid: any;
+  isometricGrid: any
 
   componentDidMount() {
     const {
@@ -14,25 +14,18 @@ class ReactIsometricGrid extends Component<ReactIsometricGridProps> {
       perspective = DEFAULT_PROPS.perspective,
       transform = DEFAULT_PROPS.transform,
       stackItemsAnimation,
-    } = this.props;
+    } = this.props
 
-    this.isometricGrid = new IsometricGrid(
-      document.querySelector(`.${styles.isolayer}`),
-      {
-        perspective,
-        transform,
-        stackItemsAnimation,
-        onGridLoaded,
-      }
-    );
+    this.isometricGrid = new IsometricGrid(document.querySelector(`.${styles.isolayer}`), {
+      perspective,
+      transform,
+      stackItemsAnimation,
+      onGridLoaded,
+    })
   }
 
   render() {
-    const {
-      style = DEFAULT_PROPS.style,
-      shadow = DEFAULT_PROPS.shadow,
-      children,
-    } = this.props;
+    const { style = DEFAULT_PROPS.style, shadow = DEFAULT_PROPS.shadow, children } = this.props
 
     return (
       <div
@@ -44,32 +37,32 @@ class ReactIsometricGrid extends Component<ReactIsometricGridProps> {
       >
         <ul className={styles.grid}>{children}</ul>
       </div>
-    );
+    )
   }
 }
 
 type ReactIsometricGridProps = {
   // have a shadow under the cells
-  shadow: boolean;
+  shadow: boolean
 
   // ongridloaded callback
-  onGridLoaded: OptionType['onGridLoaded'];
+  onGridLoaded: OptionType['onGridLoaded']
 
   // style
-  style: React.CSSProperties;
+  style: React.CSSProperties
 
   // children (Cell elements)
-  children: ReactNode;
+  children: ReactNode
 
   // perspective value, # of px distance from z origin
-  perspective: number;
+  perspective: number
 
   // transform of the isometric grid in 3d space
   // https://www.w3schools.com/cssref/css3_pr_transform.asp
-  transform: string;
+  transform: string
 
   // animation values for each cell dynamicjs
-  stackItemsAnimation: OptionType['stackItemsAnimation'];
+  stackItemsAnimation: OptionType['stackItemsAnimation']
   // {
   //   // object of the properties/values you want to animate
   //   // https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function
@@ -79,7 +72,7 @@ type ReactIsometricGridProps = {
   //   // https://github.com/michaelvillar/dynamics.js#dynamicsanimateel-properties-options
   //   options: string,
   // }
-};
+}
 
 const DEFAULT_PROPS = {
   shadow: false,
@@ -97,15 +90,15 @@ const DEFAULT_PROPS = {
     properties(pos: number) {
       return {
         rotateX: (pos + 1) * -15,
-      };
+      }
     },
     options(pos: number, totalItems: number) {
       return {
         type: dynamics.spring,
         delay: (totalItems - pos - 1) * 30,
-      };
+      }
     },
   },
-} as const;
+} as const
 
-export default ReactIsometricGrid;
+export default ReactIsometricGrid

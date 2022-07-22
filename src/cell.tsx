@@ -1,35 +1,28 @@
-import React, { Component } from 'react';
-import classNames from 'classnames';
-import uniqid from 'uniqid';
+import React, { Component } from 'react'
+import classNames from 'classnames'
+import uniqid from 'uniqid'
 
-import styles from './react-isometric-grid.scss';
-import { isValidColor } from './utils/misc';
+import styles from './react-isometric-grid.scss'
+import { isValidColor } from './utils/misc'
 
 const DEFAULT_STYLE: React.CSSProperties = {
   transformStyle: 'preserve-3d',
   width: '200px',
   height: '200px',
-};
+}
 
 const DEFAULT_LAYER_STYLE: React.CSSProperties = {
   width: '200px',
   height: '200px',
-};
+}
 
 class Cell extends Component<CellProps> {
   render() {
-    const {
-      layers,
-      href,
-      title,
-      style = DEFAULT_STYLE,
-      layerStyle = DEFAULT_LAYER_STYLE,
-      onClick,
-    } = this.props;
+    const { layers, href, title, style = DEFAULT_STYLE, layerStyle = DEFAULT_LAYER_STYLE, onClick } = this.props
 
     const layerList = layers.map((layer) => {
       if (!layer) {
-        return null;
+        return null
       }
       if (isValidColor(layer)) {
         return (
@@ -42,7 +35,7 @@ class Cell extends Component<CellProps> {
               backgroundColor: layer,
             }}
           />
-        );
+        )
       }
       return (
         <img
@@ -52,8 +45,8 @@ class Cell extends Component<CellProps> {
           src={layer}
           style={{ ...DEFAULT_LAYER_STYLE, ...layerStyle }}
         />
-      );
-    });
+      )
+    })
 
     return (
       <li className={styles.grid__item}>
@@ -70,28 +63,28 @@ class Cell extends Component<CellProps> {
           {!!title && <span className={styles.grid__title}>{title}</span>}
         </a>
       </li>
-    );
+    )
   }
 }
 
 export type CellProps = {
   // arry of images to be in the stack, or hex string for layer colors
-  layers: string[];
+  layers: string[]
 
   // onclick navigation link
-  href: string;
+  href: string
 
   // onClick function
-  onClick: () => void;
+  onClick: () => void
 
   // optional tital for the stack
-  title: string;
+  title: string
 
   // styling for the Cell element
-  style: React.CSSProperties;
+  style: React.CSSProperties
 
   // styling for the individual layers
-  layerStyle: React.CSSProperties;
-};
+  layerStyle: React.CSSProperties
+}
 
-export default Cell;
+export default Cell

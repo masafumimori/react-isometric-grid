@@ -1,39 +1,39 @@
-const path = require('path');
-const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
-const nodeExternals = require('webpack-node-externals');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path')
+const webpack = require('webpack')
+// const autoprefixer = require('autoprefixer');
+const nodeExternals = require('webpack-node-externals')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const target = process.env.TARGET || 'umd';
+const target = process.env.TARGET || 'umd'
 
-const styleLoader = {
-  loader: 'style-loader',
-  options: { insert: 'top' },
-};
+// const styleLoader = {
+//   loader: 'style-loader',
+//   options: { insert: 'top' },
+// };
 
 const fileLoader = {
   loader: 'file-loader',
   options: { name: 'static/[name].[ext]' },
-};
+}
 
-const postcssLoader = {
-  loader: 'postcss-loader',
-  options: {
-    plugins: () => [
-      autoprefixer({ browsers: ['IE >= 9', 'last 2 versions', '> 1%'] }),
-    ],
-  },
-};
+// const postcssLoader = {
+//   loader: 'postcss-loader',
+//   options: {
+//     plugins: () => [
+//       autoprefixer({ browsers: ['IE >= 9', 'last 2 versions', '> 1%'] }),
+//     ],
+//   },
+// };
 
-const cssLoader = (isLocal) => ({
-  loader: 'css-loader',
-  options: {
-    modules: true,
-    '-autoprefixer': true,
-    importLoaders: true,
-    localIdentName: isLocal ? 'rst__[local]' : null,
-  },
-});
+// const cssLoader = (isLocal) => ({
+//   loader: 'css-loader',
+//   options: {
+//     modules: true,
+//     '-autoprefixer': true,
+//     importLoaders: true,
+//     localIdentName: isLocal ? 'rst__[local]' : null,
+//   },
+// });
 
 const config = {
   mode: 'production',
@@ -70,7 +70,7 @@ const config = {
     extensions: ['.ts', '.tsx', '.js', '.json'],
   },
   target: ['web', 'es5'],
-};
+}
 
 switch (target) {
   case 'umd':
@@ -80,20 +80,20 @@ switch (target) {
         // load non-javascript files with extensions, presumably via loaders
         allowlist: [/\.(?!(?:jsx?|json)$).{1,5}$/i],
       }),
-    ];
-    break;
+    ]
+    break
   case 'development':
-    config.devtool = 'eval-source-map';
+    config.devtool = 'eval-source-map'
     config.module.rules.push({
       test: /\.(jpe?g|png|gif|ico|svg)$/,
       use: [fileLoader],
       exclude: path.join(__dirname, 'node_modules'),
-    });
-    config.entry = ['react-hot-loader/patch', './examples/basic-example/index'];
+    })
+    config.entry = ['react-hot-loader/patch', './examples/basic-example/index']
     config.output = {
       path: path.join(__dirname, 'build'),
       filename: 'static/[name].js',
-    };
+    }
     config.plugins = [
       new HtmlWebpackPlugin({
         inject: true,
@@ -101,25 +101,25 @@ switch (target) {
       }),
       new webpack.EnvironmentPlugin({ NODE_ENV: 'development' }),
       new webpack.NoEmitOnErrorsPlugin(),
-    ];
+    ]
     config.devServer = {
       contentBase: path.join(__dirname, 'build'),
       port: process.env.PORT || 3001,
       stats: 'minimal',
-    };
+    }
 
-    break;
+    break
   case 'demo':
     config.module.rules.push({
       test: /\.(jpe?g|png|gif|ico|svg)$/,
       use: [fileLoader],
       exclude: path.join(__dirname, 'node_modules'),
-    });
-    config.entry = './examples/basic-example/index';
+    })
+    config.entry = './examples/basic-example/index'
     config.output = {
       path: path.join(__dirname, 'build'),
       filename: 'static/[name].js',
-    };
+    }
     config.plugins = [
       new HtmlWebpackPlugin({
         inject: true,
@@ -131,12 +131,12 @@ switch (target) {
           warnings: false,
         },
       }),
-    ];
+    ]
 
-    break;
+    break
   default:
 }
 
-module.exports = config;
+module.exports = config
 
 // REF: https://medium.com/swlh/setting-up-a-react-typescript-sass-webpack-and-babel-7-project-in-6-steps-b4d172d1d0d6
