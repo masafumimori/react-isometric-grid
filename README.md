@@ -1,5 +1,9 @@
 # react-isometric-grids [![Build Status](https://travis-ci.org/wuweiweiwu/react-isometric-grid.svg?branch=master)](https://travis-ci.org/wuweiweiwu/react-isometric-grid) [![npm version](https://badge.fury.io/js/react-isometric-grid.svg)](https://badge.fury.io/js/react-isometric-grid)
 
+WARNING: THIS LIBRARY DOES NOT PROPERLY WORK YET.
+
+TypeScript compatible isometric grid originally made in https://github.com/frontend-collective/react-isometric-grid
+
 React Isometric Grids :stuck_out_tongue: Inspired by https://github.com/codrops/IsometricGrids
 
 Featured in Codrop [Collective 386](https://tympanus.net/codrops/collective/collective-386/)!
@@ -25,14 +29,14 @@ import 'normalize.css';
 ## Usage
 
 ```javascript
-import React, { Component } from 'react';
-import IsometricGrid, { Cell } from 'react-isometric-grid';
-import dynamics from 'dynamics.js';
+import React, { Component } from 'react'
+import IsometricGrid, { Cell } from 'react-isometric-grid'
+import dynamics from 'dynamics.js'
 
 class App extends Component {
   render() {
     function getRandomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
+      return Math.floor(Math.random() * (max - min + 1)) + min
     }
 
     return (
@@ -40,13 +44,13 @@ class App extends Component {
         shadow
         transform="rotateX(45deg) rotateZ(45deg)"
         stackItemsAnimation={{
-          properties: function(pos) {
+          properties: function (pos) {
             return {
               translateZ: (pos + 1) * 30,
               rotateZ: getRandomInt(-4, 4),
-            };
+            }
           },
-          options: function(pos, itemstotal) {
+          options: function (pos, itemstotal) {
             return {
               type: dynamics.bezier,
               duration: 500,
@@ -55,49 +59,21 @@ class App extends Component {
                 { x: 1, y: 1, cp: [{ x: 0.3, y: 1 }] },
               ],
               delay: (itemstotal - pos - 1) * 40,
-            };
+            }
           },
         }}
         style={{ height: '800px', width: '900px' }}
       >
-        <Cell
-          layers={[
-            'https://picsum.photos/600/600/?random',
-            '#9972fc',
-            '#c322a3',
-            '#9eb5c2',
-          ]}
-        />
-        <Cell
-          layers={[
-            'https://picsum.photos/200/300/?random',
-            '#9972fc',
-            '#c322a3',
-            '#9eb5c2',
-          ]}
-        />
-        <Cell
-          layers={[
-            'https://picsum.photos/400/300/?random',
-            '#9972fc',
-            '#c322a3',
-            '#9eb5c2',
-          ]}
-        />
-        <Cell
-          layers={[
-            'https://picsum.photos/200/500/?random',
-            '#9972fc',
-            '#c322a3',
-            '#9eb5c2',
-          ]}
-        />
+        <Cell layers={['https://picsum.photos/600/600/?random', '#9972fc', '#c322a3', '#9eb5c2']} />
+        <Cell layers={['https://picsum.photos/200/300/?random', '#9972fc', '#c322a3', '#9eb5c2']} />
+        <Cell layers={['https://picsum.photos/400/300/?random', '#9972fc', '#c322a3', '#9eb5c2']} />
+        <Cell layers={['https://picsum.photos/200/500/?random', '#9972fc', '#c322a3', '#9eb5c2']} />
       </IsometricGrid>
-    );
+    )
   }
 }
 
-export default App;
+export default App
 ```
 
 ## Options
@@ -147,7 +123,8 @@ dynamic.js animations parameters
 | title               | string          | title that is under the layers. Shown on mouse over                                             | `null`                                                               |
 | style               | object          | inline styling for the Cell component                                                           | `{ width: '200px', height: '200px', transformStyle: 'preserve-3d' }` |
 | layerStyle          | object          | inline styling for each inner layer                                                             | `{ width: '200px', height: '200px' }`                                |
-## Compatibility 
+
+## Compatibility
 
 It is compatible in browsers where `transform-style: 3d` is supported.
 
@@ -169,18 +146,18 @@ After cloning the repository and running `npm install` or `yarn install` inside,
 # Starts a webpack dev server that hosts a demo page with the component.
 # It uses react-hot-loader so changes are reflected on save.
 npm start
-# or 
+# or
 yarn start
 
 # Start the storybook, which has several different examples to play with.
 # Also hot-reloaded.
 npm run storybook
-# or 
+# or
 yarn storybook
 
 # Runs the library tests
 npm test
-# or 
+# or
 yarn test
 
 # Lints the code with eslint
@@ -192,7 +169,7 @@ yarn lint
 # This build is necessary to reflect changes if youre
 #  `npm link`-ed to this repository from another local project.
 npm run build
-# or 
+# or
 yarn build
 ```
 
@@ -204,8 +181,8 @@ MIT
 
 ## Credits
 
-* [Codrops](http://www.codrops.com)
-* [Masonry](http://masonry.desandro.com/) by David DeSandro.
-* [Dynamics.js](http://dynamicsjs.com/) by Michael Villar.
-* [Unsplash](http://unsplash.com)
-* Dribbble artists: [Mike](https://dribbble.com/creativemints), [Forefathers](https://dribbble.com/forefathers), [Julian Lavallee](https://dribbble.com/JulienLavallee), [Cosmin Capitanu](https://dribbble.com/Radium)
+- [Codrops](http://www.codrops.com)
+- [Masonry](http://masonry.desandro.com/) by David DeSandro.
+- [Dynamics.js](http://dynamicsjs.com/) by Michael Villar.
+- [Unsplash](http://unsplash.com)
+- Dribbble artists: [Mike](https://dribbble.com/creativemints), [Forefathers](https://dribbble.com/forefathers), [Julian Lavallee](https://dribbble.com/JulienLavallee), [Cosmin Capitanu](https://dribbble.com/Radium)

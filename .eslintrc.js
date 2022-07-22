@@ -22,7 +22,7 @@ module.exports = {
     project: ['./tsconfig.json'],
   },
   plugins: ['react', '@typescript-eslint'],
-  ignorePatterns: ['.eslintrc.js', 'webpack.config.js'],
+  ignorePatterns: ['.eslintrc.js', 'webpack.config.js', 'jest.config.js', 'test/**/*'],
   rules: {
     '@typescript-eslint/no-unsafe-call': 'warn',
     '@typescript-eslint/no-unsafe-member-access': 'warn',
