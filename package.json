@@ -1,6 +1,6 @@
 {
   "name": "react-isometric-grid-ts",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Isometric grid component for React and Typescript",
   "scripts": {
     "build": "yarn clean && cross-env NODE_ENV=production TARGET=umd webpack --bail",
@@ -22,7 +22,7 @@
     "build-storybook": "cross-env NODE_ENV=production TARGET=demo build-storybook -o build/storybook"
   },
   "main": "dist/main.js",
-  "typings": "dist/index.d.ts",
+  "typings": "dist/src/index.d.ts",
   "files": [
     "dist"
   ],
